@@ -1,0 +1,46 @@
+openapi: 3.0.3
+info:
+  title: API with Basic Authentication
+  description: Example of an API protected with Basic Authentication.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8888
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "123"
+        name:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          example: "john.doe@example.com"
+
+paths:
+  /v1/users:
+    get:
+      summary: Lists all users
+      security:
+        - BasicAuth: []
+      responses:
+        '200':
+          description: List of users successfully returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized. Invalid credentials.
